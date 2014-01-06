@@ -1,5 +1,5 @@
 """
-Django settings for srovicio project.
+Django settings for sroaddiction project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -30,12 +30,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    'grappelli',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'sroaddiction.apps.accounts',
+    'sroaddiction.apps.core',
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -47,9 +53,16 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'srovicio.urls'
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+)
 
-WSGI_APPLICATION = 'srovicio.wsgi.application'
+GRAPPELLI_ADMIN_TITLE = 'Sroaddiction'
+
+ROOT_URLCONF = 'sroaddiction.urls'
+
+WSGI_APPLICATION = 'sroaddiction.wsgi.application'
 
 
 # Database
@@ -65,7 +78,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en_us'
 
 TIME_ZONE = 'UTC'
 
