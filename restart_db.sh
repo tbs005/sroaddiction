@@ -4,8 +4,7 @@
 # @autor: Wendell P. Barreto
 # @email: wendellp.barreto@gmail.com
 # @project: Sroaddiction
-# @doc: dependencies.sh
-# @desc: 
+# @doc: restart_db.sh
 # ----------------------------------
 
 
@@ -16,7 +15,6 @@ while true; do
         	sudo -u postgres psql -c 'DROP DATABASE sroaddiction_db'
 			sudo -u postgres psql -c 'CREATE DATABASE sroaddiction_db'
 			sudo -u postgres psql -c 'CREATE USER sroaddiction_admin'
-			sudo -u postgres psql -c "ALTER USER sroaddiction_admin WITH PASSWORD 'zaaNF=Olzi)ytZ'"
 			sudo -u postgres psql -c 'GRANT ALL PRIVILEGES ON DATABASE sroaddiction_db TO sroaddiction_admin'
 			sudo -u postgres psql -d sroaddiction_db -c 'CREATE EXTENSION hstore' 
 
@@ -25,7 +23,6 @@ while true; do
 			psql -c 'DROP DATABASE sroaddiction_db'
 			psql -c 'CREATE DATABASE sroaddiction_db'
 			psql -c 'CREATE USER sroaddiction_admin'
-			sudo -u postgres psql -c "ALTER USER sroaddiction_admin WITH PASSWORD 'zaaNF=Olzi)ytZ'"
 			psql -c 'GRANT ALL PRIVILEGES ON DATABASE sroaddiction_db TO sroaddiction_admin'
 			psql -d sroaddiction_db -c 'CREATE EXTENSION hstore'
 
@@ -34,8 +31,5 @@ while true; do
     esac
 done
 
-echo '[>] Syncing db...'
 python manage.py syncdb
-
-echo '[>] Collecting static files...'
 python manage.py collectstatic
