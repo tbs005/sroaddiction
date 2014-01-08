@@ -6,6 +6,113 @@ from django.utils.translation import ugettext_lazy as _
 
 from .countries import CountryField
 
+class Bank(models.Model):
+	'''
+	Available bank to deposit or money transfer
+	'''
+	name = models.CharField(_('Name'), max_length=32, help_text=_('Bank name'))
+	observation = models.TextField(_('Observation'), max_length=512, blank=True, help_text=_('Bank observation'))
+	image = models.ImageField(upload_to='/media/bank_img/')
+
+	class Meta:
+		verbose_name = _('Bank')
+		verbose_name_plural = _('Banks')
+
+	def __unicode__(self):
+		return u'Bank %s' % (self.name.capitalize())
+
+class Account(models.Model):
+	'''
+	Account for deposit or money transfer
+	'''
+	CHECKING = 'checking'
+	SAVING = 'saving'
+	TYPES = (
+		(CHECKING, 'Checking account'),
+		(SAVING, 'Saving account'),
+	)
+	
+	agency = models.CharField(_('Agency'), max_length=16, help_text=_('Account agency'))
+	account = models.CharField(_('Account'), max_length=16, help_text=_('Account'))
+	operation = models.CharField(_('Operation'), max_length=16, blank=True, help_text=_('Account operation'))
+	owner = models.CharField(_('Owner'), max_length=32, help_text=_('Account owner'))
+	type = models.CharField(_('Type'), max_length=16, choices=TYPES, help_text=_('Account type'))
+	bank = models.ForeignKey(Bank)
+
+	class Meta:
+		verbose_name = _('Account')
+		verbose_name_plural = _('Accounts')
+
+	def __unicode__(self):
+		return u'Bank %s account' % (self.bank.name.capitalize())
+
+class Bot(models.Model):
+	'''
+	Bot
+	'''
+	name = models.CharField(_('Name'), max_length=32, help_text=_('Bot name'))
+	subtitle = models.CharField(_('Subtitle'), max_length=128, help_text=_('Bot subtitle'))
+	observation = models.TextField(_('Observation'), max_length=512, blank=True, help_text=_('Bot observation'))
+	image = models.ImageField(upload_to='/media/bank_img/')
+
+	class Meta:
+		verbose_name = _('Bot')
+		verbose_name_plural = _('Bots')
+
+	def __unicode__(self):
+		return u'Bot'
+
+class Info(models.Model):
+	'''
+	Website informations
+	'''
+
+
+	class Meta:
+		verbose_name = _('Information')
+		verbose_name_plural = _('Informations')
+
+	def __unicode__(self):
+		return u'Information'
+
+class Treatment(models.Model):
+	'''
+	Establishment open times
+	'''
+	value = models.CharField(_('Treatment'), max_length=62, help_text=_('Treatment value'))
+	info = models.ForeignKey(Info)
+
+	class Meta:
+		verbose_name = _('Treatment')
+		verbose_name_plural = _('Treatments')
+
+	def __unicode__(self):
+		return u'%s' % (self.value.capitalize())
+
+class Contact(models.Model):
+	'''
+	Info contact
+	'''
+	EMAIL = 'email'
+	PHONE = 'phone'
+	SKYPE = 'skype'
+	TYPES = (
+		(EMAIL, 'E-mail'),
+		(PHONE, 'Phone number'),
+		(SKYPE, 'Skype id'),
+	)
+
+	type = models.CharField(_('Type'), max_length=5, choices=TYPES, help_text=_('Contact type'))
+	value = models.CharField(_('Value'), max_length=32, help_text=_('Contact value'))
+	info = models.ForeignKey(Info)
+
+	class Meta:
+		verbose_name = _('Contact')
+		verbose_name_plural = _('Contacts')
+
+	def __unicode__(self):
+		return u'%s contact' % (self.type.capitalize())
+
 class Nationality(models.Model):
 	'''
 	'''
@@ -17,7 +124,7 @@ class Nationality(models.Model):
 		verbose_name_plural = _('Nationalities')
 
 	def __unicode__(self):
-		return u'Nationality %s' % (self.name.lower())
+		return u'%s' % (self.name.upper())
 
 class Server(models.Model):
 	'''
@@ -67,7 +174,7 @@ class Image(models.Model):
 class Video(models.Model):
 	'''
 	'''
-	url = models.CharField(_('url'), max_length=64, help_text=_('Video url'))
+	url = models.CharField(_('url'), max_length=64, help_text=_('Youtube video CODE (Ex: j4aGt6dUVj0 for http://www.youtube.com/watch?v=j4aGt6dUVj0)'))
 	server = models.ForeignKey(Server)
 
 	class Meta:
@@ -90,3 +197,47 @@ class News(models.Model):
 
 	def __unicode__(self):
 		return u'New %s' % (self.name.lower())
+
+class Type(models.Model):
+	'''
+	'''
+	name = models.CharField(_('Name'), max_length=32, help_text=_('Type name'))
+
+	class Meta:
+		verbose_name = _('Type of price table')
+		verbose_name_plural = _('Types of price tables')
+
+	def __unicode__(self):
+		return u'%s' % (self.name.upper())
+
+class PriceTable(models.Model):
+	'''
+	'''
+	type = models.ForeignKey(Type, verbose_name=_('Type'), help_text=_('Price table type'))
+	server = models.ForeignKey(Server, verbose_name=_('Server'), help_text=_('Server'))
+
+	class Meta:
+		unique_together = ('type', 'server')
+		verbose_name = _('Price table')
+		verbose_name_plural = _('Price tables')
+
+	def __unicode__(self):
+		return u'Price table of server %s with type %s' % (self.type.name.lower(), self.server.name.lower())
+
+class Price(models.Model):
+	'''
+	'''
+	discrimination = models.CharField(_('Discrimination'), max_length=64, help_text=_('Discrimination of price'))
+	real = models.DecimalField(_('Real'), max_digits=8, decimal_places=2, help_text=_('Real value (R$)'))
+	bcash = models.DecimalField(_('BCash'), max_digits=8, decimal_places=2, help_text=_('BCash value (R$)'))
+	pagseguro = models.DecimalField(_('PagSeguro'), max_digits=8, decimal_places=2, help_text=_('PagSeguro value (R$)'))
+	paypal_real = models.DecimalField(_('Paypal real'), max_digits=8, decimal_places=2, help_text=_('Paypal real value (R$)'))
+	paypal_dollar = models.DecimalField(_('Paypal dollar'), max_digits=8, decimal_places=2, help_text=_('Paypal dollar value'))
+	price_table = models.ForeignKey(PriceTable, verbose_name=_('Price table'), help_text=_('Price table'))
+	
+	class Meta:
+		verbose_name = _('Price')
+		verbose_name_plural = _('Prices')
+
+	def __unicode__(self):
+		return u'Price table of server %s with type %s' % (self.type.name.lower(), self.server.name.lower())
