@@ -3,6 +3,7 @@ Sroaddction
 
 E-commerce website specializing in product sales for Silkroad Online.
 
+* Check out http://sroaddiction.wendellpbarreto.com/ for a non-update beta version of this project
 
 The MIT License (MIT)
 
