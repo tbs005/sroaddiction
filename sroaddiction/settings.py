@@ -92,6 +92,24 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Additional locations of static files
+
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(BASE_DIR, 'sroaddiction/assets'),
+)
+
+# Additional locations of template files
+
+TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(BASE_DIR, 'sroaddiction/templates'),
+)
+
 # Static and media roots
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
