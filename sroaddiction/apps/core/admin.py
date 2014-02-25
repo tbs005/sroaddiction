@@ -7,11 +7,40 @@ from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 
 from .models import *
+from .forms import *
 
 admin.site.unregister(Group)
 # admin.site.unregister(Site)
 
 # admin.site.register(Account)
+
+class TreatmentInline(admin.TabularInline):
+	model = Treatment
+	extra = 1
+	max_num = 20
+	can_delete = True
+
+	verbose_name = _('Treatment')
+	verbose_name_plural = _('Treatments')
+
+class ContactInline(admin.TabularInline):
+	model = Contact
+	extra = 1
+	max_num = 20
+	can_delete = True
+
+	verbose_name = _('Contact')
+	verbose_name_plural = _('Contacts')
+
+class InfoAdmin(admin.ModelAdmin):
+	model = Info
+	form = InfoAdminForm
+	inlines = (
+		TreatmentInline,
+		ContactInline,
+	)
+
+admin.site.register(Info, InfoAdmin)
 
 class AccountInline(admin.StackedInline):
 	model = Account

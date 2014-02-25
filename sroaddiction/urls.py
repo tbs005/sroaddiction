@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     url(r'^$', 'sroaddiction.apps.frontend.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
     
-    (r'^grappelli/', include('grappelli.urls')),
+    url(r'^grappelli/', include('grappelli.urls')),
+    url(r'^redactor/', include('redactor.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )

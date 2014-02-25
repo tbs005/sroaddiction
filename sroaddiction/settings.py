@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
     'grappelli',
+    'redactor',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -68,15 +69,25 @@ WSGI_APPLICATION = 'sroaddiction.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE':'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'sroaddiction_db',                              
+#         'USER': 'sroaddiction_admin',
+#         'PASSWORD': 'zaaNF=Olzi)ytZ',
+#         'HOST': 'localhost',                                
+#         'PORT': '',    
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE':'django.db.backends.postgresql_psycopg2',
-        'NAME': 'sroaddiction_db',                              
-        'USER': 'sroaddiction_admin',
-        'PASSWORD': 'zaaNF=Olzi)ytZ',
-        'HOST': 'localhost',                                
-        'PORT': '',    
-    }
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': 'sroaddiction_db',
+    'USER': os.environ.get('PG_USER'),
+    'PASSWORD': os.environ.get('PG_PASSWORD'),
+    'HOST': '127.0.0.1',
+  }
 }
 
 # Internationalization
@@ -120,3 +131,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Redactor configs
+
+REDACTOR_OPTIONS = {'lang': 'en'} 
+REDACTOR_UPLOAD = MEDIA_ROOT
+

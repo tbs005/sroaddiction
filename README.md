@@ -1,5 +1,6 @@
 Sroaddction
 ========
+![Codeship Status](https://www.codeship.io/projects/bc900b90-80a4-0131-e4b1-261558e35f7a/status)
 
 E-commerce website specializing in product sales for Silkroad Online.
 

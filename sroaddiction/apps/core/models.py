@@ -6,67 +6,13 @@ from django.utils.translation import ugettext_lazy as _
 
 from .countries import CountryField
 
-class Bank(models.Model):
-	'''
-	Available bank to deposit or money transfer
-	'''
-	name = models.CharField(_('Name'), max_length=32, help_text=_('Bank name'))
-	observation = models.TextField(_('Observation'), max_length=512, blank=True, help_text=_('Bank observation'))
-	image = models.ImageField(upload_to='/media/bank_img/')
-
-	class Meta:
-		verbose_name = _('Bank')
-		verbose_name_plural = _('Banks')
-
-	def __unicode__(self):
-		return u'Bank %s' % (self.name.capitalize())
-
-class Account(models.Model):
-	'''
-	Account for deposit or money transfer
-	'''
-	CHECKING = 'checking'
-	SAVING = 'saving'
-	TYPES = (
-		(CHECKING, 'Checking account'),
-		(SAVING, 'Saving account'),
-	)
-	
-	agency = models.CharField(_('Agency'), max_length=16, help_text=_('Account agency'))
-	account = models.CharField(_('Account'), max_length=16, help_text=_('Account'))
-	operation = models.CharField(_('Operation'), max_length=16, blank=True, help_text=_('Account operation'))
-	owner = models.CharField(_('Owner'), max_length=32, help_text=_('Account owner'))
-	type = models.CharField(_('Type'), max_length=16, choices=TYPES, help_text=_('Account type'))
-	bank = models.ForeignKey(Bank)
-
-	class Meta:
-		verbose_name = _('Account')
-		verbose_name_plural = _('Accounts')
-
-	def __unicode__(self):
-		return u'Bank %s account' % (self.bank.name.capitalize())
-
-class Bot(models.Model):
-	'''
-	Bot
-	'''
-	name = models.CharField(_('Name'), max_length=32, help_text=_('Bot name'))
-	subtitle = models.CharField(_('Subtitle'), max_length=128, help_text=_('Bot subtitle'))
-	observation = models.TextField(_('Observation'), max_length=512, blank=True, help_text=_('Bot observation'))
-	image = models.ImageField(upload_to='/media/bank_img/')
-
-	class Meta:
-		verbose_name = _('Bot')
-		verbose_name_plural = _('Bots')
-
-	def __unicode__(self):
-		return u'Bot'
-
 class Info(models.Model):
 	'''
 	Website informations
 	'''
-
+	confirm_payment = models.CharField(_('Confirm payment'), max_length=512, help_text=_('Confirme payment information'))
+	how_to_buy = models.CharField(_('How to buy'), max_length=512, help_text=_('How to buy information'))
+	active = models.BooleanField(default=True)
 
 	class Meta:
 		verbose_name = _('Information')
@@ -112,6 +58,62 @@ class Contact(models.Model):
 
 	def __unicode__(self):
 		return u'%s contact' % (self.type.capitalize())
+
+class Bank(models.Model):
+	'''
+	Available bank to deposit or money transfer
+	'''
+	name = models.CharField(_('Name'), max_length=32, help_text=_('Bank name'))
+	observation = models.TextField(_('Observation'), max_length=512, blank=True, help_text=_('Bank observation'))
+	image = models.ImageField(upload_to='/media/bank/')
+
+	class Meta:
+		verbose_name = _('Bank')
+		verbose_name_plural = _('Banks')
+
+	def __unicode__(self):
+		return u'%s' % (self.name.capitalize())
+
+class Account(models.Model):
+	'''
+	Account for deposit or money transfer
+	'''
+	CHECKING = 'checking'
+	SAVING = 'saving'
+	TYPES = (
+		(CHECKING, 'Checking account'),
+		(SAVING, 'Saving account'),
+	)
+	
+	agency = models.CharField(_('Agency'), max_length=16, help_text=_('Account agency'))
+	account = models.CharField(_('Account'), max_length=16, help_text=_('Account'))
+	operation = models.CharField(_('Operation'), max_length=16, blank=True, help_text=_('Account operation'))
+	owner = models.CharField(_('Owner'), max_length=32, help_text=_('Account owner'))
+	type = models.CharField(_('Type'), max_length=16, choices=TYPES, help_text=_('Account type'))
+	bank = models.ForeignKey(Bank)
+
+	class Meta:
+		verbose_name = _('Account')
+		verbose_name_plural = _('Accounts')
+
+	def __unicode__(self):
+		return u'Bank %s account' % (self.bank.name.capitalize())
+
+class Bot(models.Model):
+	'''
+	Bot
+	'''
+	name = models.CharField(_('Name'), max_length=32, help_text=_('Bot name'))
+	subtitle = models.CharField(_('Subtitle'), max_length=128, help_text=_('Bot subtitle'))
+	observation = models.TextField(_('Observation'), max_length=512, blank=True, help_text=_('Bot observation'))
+	image = models.ImageField(upload_to='/media/bot/')
+
+	class Meta:
+		verbose_name = _('Bot')
+		verbose_name_plural = _('Bots')
+
+	def __unicode__(self):
+		return u'Bot'
 
 class Nationality(models.Model):
 	'''
@@ -161,7 +163,7 @@ class Server(models.Model):
 class Image(models.Model):
 	'''
 	'''
-	image = models.FileField(upload_to='/media/')
+	image = models.FileField(upload_to='/media/server/')
 	server = models.ForeignKey(Server)
 
 	class Meta:
@@ -169,7 +171,7 @@ class Image(models.Model):
 		verbose_name_plural = _('Images')
 
 	def __unicode__(self):
-		return u' '
+		return u'Image from %s' % (self.server.name.lower())
 
 class Video(models.Model):
 	'''
